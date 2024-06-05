@@ -29,4 +29,8 @@ export const postRouter = createTRPCRouter({
   getLatest: publicProcedure.query(() => {
     return post;
   }),
+
+  // getData: publicProcedure.query(() => {
+  //   return await fetch('https://storage.googleapis.com/verse-scratch-data-public/interview-takehome/caiso_carbon_intensity.json');
+  // })
 });
