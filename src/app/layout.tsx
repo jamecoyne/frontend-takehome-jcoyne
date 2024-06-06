@@ -2,6 +2,15 @@ import "~/styles/globals.css";
 import { GeistSans } from "geist/font/sans";
 import { Inter as FontSans } from "next/font/google"
 import { TRPCReactProvider } from "~/trpc/react";
+import Image from 'next/image';
+
+import {
+  ClerkProvider,
+  SignInButton,
+  SignedIn,
+  SignedOut,
+  UserButton
+} from '@clerk/nextjs'
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -14,6 +23,28 @@ export const metadata = {
   icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
 
+function TopNav() {
+  return (
+    <div className="flex flex-row bg-neutral-100 h-14 center justify-between items-center px-7">
+      <a href={"/"}>
+        <Image
+          // className="m-20"
+            src="/title.svg"
+            alt="Verse Logo"
+            width={75}
+            height={20}
+        />
+      </a>
+          <SignedOut>          
+            <SignInButton mode="modal"/>        
+          </SignedOut>        
+          <SignedIn>          
+            <UserButton afterSignOutUrl="/" afterMultiSessionSingleSignOutUrl="/" />        
+          </SignedIn>    
+    </div>
+  );
+}
+
 export default function RootLayout({
   children,
 }: {
@@ -22,11 +53,10 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${fontSans.variable}`}>
       <body>
-        <div className="flex flex-row bg-neutral-100 h-14 center justify-between items-center px-7">
-          <div>Verse</div>
-          <div>Profile</div>
-      </div>
-        <TRPCReactProvider>{children}</TRPCReactProvider>
+        <ClerkProvider>  
+          <TopNav/>
+          <TRPCReactProvider>{children}</TRPCReactProvider>
+        </ClerkProvider>
       </body>
     </html>
   );
