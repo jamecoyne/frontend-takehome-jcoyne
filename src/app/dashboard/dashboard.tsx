@@ -1,32 +1,27 @@
+'use client'
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "~/components/ui/resizable";
 import { NotesProvider } from "../_context/NotesContext";
 import Chart from "./chart";
 import Heatmap from "./heatmap";
 import NotesComponent from "./notesList";
 import { DataStructureShape, SchemaDataItem } from "./page";
+import { useState } from "react";
+import { chartType } from "./chartSelector";
 
 export default function Dashboard(props: {data: SchemaDataItem[]}){
-    const year = 2020;
-    const startDate = `${year}-01-01`;
-    const endDate = `${year}-12-31`;
+    const [currentChart, setCurrentChart] = useState<chartType>('heatmap');
     return (
         <NotesProvider>
-        <ResizablePanelGroup direction="horizontal">
-            <ResizablePanel>                
-                <Heatmap data={props.data} startDate={startDate} endDate={endDate}  />
+            <ResizablePanelGroup direction="horizontal">
+                <ResizablePanel>   
+                    {currentChart == 'linechart'&& <Chart data={props.data} width={1700} height={400} />   }
+                    {currentChart == 'heatmap' && <Heatmap data={props.data}/> }
+                </ResizablePanel>
+            <ResizableHandle withHandle/>
+            <ResizablePanel defaultSize={15} minSize={10} >
+                <NotesComponent currentChart={currentChart} setCurrentChart={setCurrentChart}/>
             </ResizablePanel>
-        <ResizableHandle />
-        <ResizablePanel>
-            <NotesComponent/>
-        </ResizablePanel>
-</ResizablePanelGroup>
-          
+            </ResizablePanelGroup>  
         </NotesProvider>
    )
 }
-
-//   {/* <div style={{ display: 'flex' }}>
-                
-//                  {/* <Chart data={props.data} width={1700} height={400} /> */}
-
-//                 </div> */}

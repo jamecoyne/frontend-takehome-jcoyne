@@ -5,7 +5,7 @@ import { Calendar } from "~/components/ui/calendar";
 import { format } from "date-fns"
 import { Calendar as CalendarIcon } from "lucide-react"
 
-export default function DatePopover(props: {date: Date | undefined, setDate: (date: Date | undefined) => void}) {
+export default function DatePopover(props: {date: Date | undefined, setDate: (date: Date | undefined) => void, placeholder: string}) {
     return (
       <Popover>
         <PopoverTrigger asChild>
@@ -17,7 +17,7 @@ export default function DatePopover(props: {date: Date | undefined, setDate: (da
             )}
           >
             <CalendarIcon className="mr-2 h-4 w-4" />
-            {props.date ? format(props.date, "PPP") : <span>Pick a date</span>}
+            {props.date ? format(props.date, "PPP") : <span>{props.placeholder}</span>}
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-auto p-0">

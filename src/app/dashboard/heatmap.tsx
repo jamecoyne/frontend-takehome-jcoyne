@@ -1,23 +1,18 @@
 'use client'
-import { useContext, useEffect, useRef } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import * as d3 from 'd3';
-import { DataStructureShape, SchemaDataItem } from "./page";
+import { SchemaDataItem } from "./page";
 import { Note, NotesContext } from "../_context/NotesContext";
+import { Separator } from "~/components/ui/separator";
+import HeatmapNav from "./HeatmapNav";
 
-interface HeatmapProps {
-    data: SchemaDataItem[];
-    startDate: string;
-    endDate: string;
-}
-
-function HeatmapNav() {
-  return <div className="h-10 bg-neutral-300"></div>
-}
-
-function Heatmap(props: HeatmapProps) {
+function Heatmap(props:  { data: SchemaDataItem[]}) {
     const svgRef = useRef<SVGSVGElement | null>(null);
     const context = useContext(NotesContext);
-    
+    const [currentYear, setCurrentYear] = useState(2021);
+    const startDate = `${currentYear}-01-01`;
+    const endDate = `${currentYear}-12-31`;
+
     if (!context) {
         throw new Error('NotesComponent must be used within a NotesProvider');
     }
@@ -51,7 +46,7 @@ function Heatmap(props: HeatmapProps) {
         const cellSize = 10;
         const margin_size = 40;
         const margin = { top: margin_size, right: margin_size, bottom: margin_size, left: margin_size };
-        const width = (365 * cellSize) + (2 * margin_size);
+        const width = (365 * cellSize) + (14 * margin_size);
         const height = (24 * cellSize) + (2 * margin_size);
 
         const svg_root = d3
@@ -64,8 +59,8 @@ function Heatmap(props: HeatmapProps) {
 
         const parseTime = d3.timeParse('%Y-%m-%d');
 
-        const startDateParsed = parseTime(props.startDate);
-        const endDateParsed = parseTime(props.endDate);
+        const startDateParsed = parseTime(startDate);
+        const endDateParsed = parseTime(endDate);
         const days = d3.timeDays(startDateParsed!, endDateParsed!);
         const months = d3.timeMonths(startDateParsed!, endDateParsed!);
 
@@ -142,9 +137,13 @@ function Heatmap(props: HeatmapProps) {
             .attr('cy', (d) => d.hour * cellSize + cellSize / 2)
             .attr('r', cellSize / 3)
             .attr('fill', 'red');
-    }, [structured_data, props.startDate, props.endDate, notes]);
+    }, [structured_data, startDate, endDate, notes]);
 
-    return <div className="w-screen overflow-y-auto"><svg ref={svgRef}></svg></div>;
+    return (<>
+    <HeatmapNav currentYear={currentYear} setCurrentYear={setCurrentYear} maxYear={2024} minYear={2019}/>
+    <Separator />
+    <div className="w-screen overflow-y-auto h-screen"><svg ref={svgRef}></svg></div>
+    </>);
 };
 
 export default Heatmap;

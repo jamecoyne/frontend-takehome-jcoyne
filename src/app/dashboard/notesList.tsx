@@ -1,63 +1,12 @@
 'use client'
 import React, { useContext, useState } from 'react';
 import { Note, NotesContext } from '../_context/NotesContext';
-import ChartSelector from './chartSelector';
-
-
-// const NotesComponent: React.FC = () => {
-//     const context = useContext(NotesContext);
-  
-//     if (!context) {
-//       throw new Error('NotesComponent must be used within a NotesProvider');
-//     }
-  
-//     const { notes, addNote, removeNote, toggleNote, toggleAddNote, addNoteEnabled } = context;
-//     const [noteText, setNoteText] = useState('');
-  
-//     const handleCreateNote = () => {
-//       const newNote: Note = {
-//         id: Date.now().toString(), // Use a unique id
-//         note: noteText,
-//         isSelected: false,
-//       };
-//       addNote(newNote);
-//       setNoteText('');
-//     };
-  
-//     return (
-//       <div>
-//         <input
-//           type="text"
-//           value={noteText}
-//           onChange={(e) => setNoteText(e.target.value)}
-//         />
-//         <button onClick={handleCreateNote}>Add Note</button>
-//         <button onClick={toggleAddNote}>Add Note ({addNoteEnabled.toString()})</button>
-//         <ul>
-//           {notes.map(note => (
-//             <li key={note.id}>
-//               <span
-//                 style={{ textDecoration: note.isSelected ? 'line-through' : 'none' }}
-//                 onClick={() => toggleNote(note.id)}
-//               >
-//                 {note.note} + {note.id}
-//               </span>
-//               <button onClick={() => removeNote(note.id)}>Remove</button>
-//             </li>
-//           ))}
-//         </ul>
-//       </div>
-//     );
-//   };
-  
-//   export default NotesComponent;
-
-// import React, { useContext } from 'react';
-// import { NotesContext } from '../_context/NotesContext';
+import ChartSelector, { chartType } from './chartSelector';
+import { Separator } from '~/components/ui/separator';
 
 
 
-const NotesComponent: React.FC = () => {
+export default function NotesComponent(props: {currentChart: chartType, setCurrentChart: (chartType: chartType) => void})  {
 
   const context = useContext(NotesContext);
       if (!context) {
@@ -66,10 +15,12 @@ const NotesComponent: React.FC = () => {
   const { notes, toggleNote, removeNote } = context;
 
   return (
-    <div style={{  borderRight: '1px solid #ccc', padding: '10px' }}>
-      <ChartSelector currentChart={'heatmap'} setCurrentChart={function (chartType: 'heatmap' | 'linechart'): void {
-        throw new Error('Function not implemented.');
-      } }/>
+    <div className='border-r b-neutral-200 '>
+      <div className='p-4 h-16 items-center flex justify-center'>
+      <ChartSelector currentChart={props.currentChart} setCurrentChart={props.setCurrentChart}/>
+      </div>
+      <Separator />
+      <div className='p-3'>
       <h2>Annotations</h2>
       <ul style={{ listStyleType: 'none', padding: 0 }}>
         {notes.map(note => (
@@ -84,8 +35,7 @@ const NotesComponent: React.FC = () => {
           </li>
         ))}
       </ul>
+      </div>
     </div>
   );
 };
-
-export default NotesComponent;
