@@ -3,6 +3,8 @@ import React, { useContext, useState } from 'react';
 import { Note, NotesContext } from '../_context/NotesContext';
 import ChartSelector, { chartType } from './chartSelector';
 import { Separator } from '~/components/ui/separator';
+import { X } from 'lucide-react';
+import { Label } from '@radix-ui/react-label';
 
 
 
@@ -22,16 +24,25 @@ export default function NotesComponent(props: {currentChart: chartType, setCurre
       <Separator />
       <div className='p-3'>
       <h2>Annotations</h2>
-      <ul style={{ listStyleType: 'none', padding: 0 }}>
+      <ul >
         {notes.map(note => (
           <li key={note.id} style={{ marginBottom: '10px' }}>
-            <span
-              style={{ textDecoration: note.isSelected ? 'line-through' : 'none', cursor: 'pointer' }}
-              onClick={() => toggleNote(note.id)}
-            >
-              {note.note}
-            </span>
-            <button onClick={() => removeNote(note.id)} style={{ marginLeft: '10px' }}>Remove</button>
+            <div className='flex flex-row items-center'>
+              <X onClick={() => removeNote(note.id)} style={{ marginLeft: '10px' }}/>
+              <Label
+                style={{ 
+                  cursor: 'pointer', 
+                  textOverflow: 'ellipsis', 
+                  overflow: 'hidden', 
+                  whiteSpace: 'nowrap',
+                  background: note.isSelected ? 'yellow' : 'white'
+                 }}
+                onClick={() => toggleNote(note.id)}
+              >
+                {note.note}
+              </Label>
+            </div>
+           
           </li>
         ))}
       </ul>

@@ -119,6 +119,11 @@ function Heatmap(props:  { data: SchemaDataItem[]}) {
             .style('text-anchor', 'end')
             .text((d) => `${d}`);
 
+        const noteColorScale = d3
+            .scaleLinear<string>()
+            .domain([0, 1])
+            .range(['red', 'green']);
+
         // Adding scatter plot points
         const noteKeys = notes.map(note => note.id);
         svg
@@ -136,7 +141,11 @@ function Heatmap(props:  { data: SchemaDataItem[]}) {
             .attr('cx', (d) => days.indexOf(d.day) * cellSize + cellSize / 2)
             .attr('cy', (d) => d.hour * cellSize + cellSize / 2)
             .attr('r', cellSize / 3)
-            .attr('fill', 'red');
+            .attr('fill', (d) => {
+                const inc = noteKeys.includes(`${d.day.toISOString().split('T')[0]}-${d.hour}`);
+                return 'red';
+            })
+            // .attr('fill', 'red');
     }, [structured_data, startDate, endDate, notes]);
 
     return (<>
