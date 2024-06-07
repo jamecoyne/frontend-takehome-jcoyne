@@ -15,9 +15,11 @@ export default function Dashboard(props: {data: SchemaDataItem[]}){
         <NotesProvider>
             <AnnotationPopover />
             <ResizablePanelGroup direction="horizontal">
-                <ResizablePanel>   
-                    {currentChart == 'linechart'&& <Chart data={props.data} width={1700} height={400} />   }
-                    {currentChart == 'heatmap' && <Heatmap data={props.data}/> }
+                <ResizablePanel>
+                    <div>
+                        {currentChart == 'linechart'&& <Chart data={props.data} />   }
+                        {currentChart == 'heatmap' && <Heatmap data={props.data}/> }
+                    </div>   
                 </ResizablePanel>
             <ResizableHandle withHandle/>
             <ResizablePanel defaultSize={15} minSize={10} >

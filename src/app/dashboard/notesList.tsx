@@ -15,13 +15,13 @@ export default function NotesComponent(props: {currentChart: chartType, setCurre
   const { notes, selectNote, removeNote, selectedNoteID } = context;
 
   return (
-    <div className='border-r b-neutral-200 '>
+    <div className='border-r b-neutral-200' style={{height: 'calc(100vh - 56px)'}}>
       <div className='p-4 h-16 items-center flex justify-center'>
       <ChartSelector currentChart={props.currentChart} setCurrentChart={props.setCurrentChart}/>
       </div>
       <Separator />
       <div className=''>
-      <h2>Annotations</h2>
+      <div className=" font-semibold p-3">Annotations</div>
       <ul >
         {notes.map(note => (
           <li 

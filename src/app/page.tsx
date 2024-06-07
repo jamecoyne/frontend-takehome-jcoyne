@@ -4,7 +4,7 @@ import { SignIn, SignOutButton, SignedIn } from "@clerk/nextjs";
 export default async function Home() {
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center ">
+    <main className="flex flex-col items-center justify-center " style={{height: 'calc(100vh - 56px)'}}>
       <Image
       className="m-20"
         src="/logo.svg"

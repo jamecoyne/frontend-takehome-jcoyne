@@ -2,12 +2,13 @@
 import { useContext, useEffect, useRef, useState } from 'react';
 import * as d3 from 'd3';
 import { SchemaDataItem } from './page';
-import { Note, NotesContext } from '../_context/NotesContext';
+import { NotesContext } from '../_context/NotesContext';
 import { Separator } from '~/components/ui/separator';
 import HeatmapNav from './HeatmapNav';
 
-function Heatmap(props: { data: SchemaDataItem[] }) {
+export default function Heatmap(props: { data: SchemaDataItem[] }) {
     const svgRef = useRef<SVGSVGElement | null>(null);
+    const containerRef = useRef(null);
     const context = useContext(NotesContext);
     const [currentYear, setCurrentYear] = useState(2021);
     const startDate = `${currentYear}-01-01`;
@@ -38,22 +39,21 @@ function Heatmap(props: { data: SchemaDataItem[] }) {
     });
 
     useEffect(() => {
+        if (!svgRef.current || !containerRef.current) return;
         const cellSize = 10;
-        const margin_size = 40;
-        const margin = { top: margin_size, right: margin_size, bottom: margin_size, left: margin_size };
-        // const width = 365 * cellSize + 14 * margin_size;
-        // const height = 24 * cellSize + 2 * margin_size;
-          const width = 1500;
-        const height = 1500;
-
+    
         const svg_root = d3.select(svgRef.current);
         svg_root.selectAll('*').remove();
+        const container = d3.select(containerRef.current);
 
+        const width = container.node().clientWidth;
+        const height = container.node().clientHeight;
         const svg = svg_root
             .attr('width', width)
             .attr('height', height)
-            .append('g')
-            .attr('transform', `translate(${margin.left}, ${margin.top})`);
+            .append('g');
+           
+            
 
         const parseTime = d3.timeParse('%Y-%m-%d');
 
@@ -88,7 +88,7 @@ function Heatmap(props: { data: SchemaDataItem[] }) {
             )
             .enter()
             .append('rect')
-            .on('click', (e, d) => {
+            .on('click', (_e, d) => {
                 handleCreateNote(`${d.day.toISOString().split('T')[0]}-${d.hour}`);
             })
             .attr('width', cellSize)
@@ -143,28 +143,22 @@ function Heatmap(props: { data: SchemaDataItem[] }) {
                 return id == selectedNoteID ? 'yellow' : 'red';
             });
 
-        const zoom = d3.zoom()
-            .scaleExtent([.1, 10])
-            .translateExtent([[0, 0], [width*2, height]])
-            .on('zoom', zoomed);
-
+        const zoom = d3.zoom<SVGSVGElement, unknown>()
+            .on('zoom', (event) => {
+                heatmapGroup.attr('transform', event.transform);
+            });
         svg_root.call(zoom);
-
-        function zoomed(event) {
-            heatmapGroup.attr('transform', event.transform);
-        }
-
-    }, [structured_data, startDate, endDate, notes]);
+    }, [structured_data, startDate, endDate, notes, containerRef]);
 
     return (
         <>
-            <HeatmapNav currentYear={currentYear} setCurrentYear={setCurrentYear} maxYear={2024} minYear={2019} />
-            <Separator />
-            {/* <div className="w-screen overflow-y-auto h-screen"> */}
-                <svg ref={svgRef}></svg>
-            {/* </div> */}
-        </>
+       
+        <HeatmapNav currentYear={currentYear} setCurrentYear={setCurrentYear} maxYear={2024} minYear={2019} />
+        <Separator />
+        <div ref={containerRef} style={{height: 'calc(100vh - 121px)', width: '100vw' }}>
+            <svg ref={svgRef} ></svg>
+        </div>
+    </>
+        
     );
 }
-
-export default Heatmap;

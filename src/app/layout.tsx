@@ -28,7 +28,6 @@ function TopNav() {
     <div className="flex flex-row bg-neutral-100 h-14 center justify-between items-center px-7">
       <a href={"/"}>
         <Image
-          // className="m-20"
             src="/title.svg"
             alt="Verse Logo"
             width={75}
