@@ -1,6 +1,5 @@
 import { expect, test } from 'vitest'
 import { render, screen } from '@testing-library/react'
-import NotesComponent from '~/app/dashboard/notesList'
 import ChartSelector from '~/app/dashboard/chartSelector'
 
  

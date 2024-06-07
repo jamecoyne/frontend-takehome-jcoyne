@@ -46,7 +46,9 @@ export default function Heatmap(props: { data: SchemaDataItem[] }) {
         svg_root.selectAll('*').remove();
         const container = d3.select(containerRef.current);
 
+        // @ts-ignore: 
         const width = container.node().clientWidth;
+        // @ts-ignore: 
         const height = container.node().clientHeight;
         const svg = svg_root
             .attr('width', width)

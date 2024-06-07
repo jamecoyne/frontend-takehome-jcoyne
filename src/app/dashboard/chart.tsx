@@ -1,7 +1,6 @@
 'use client';
-import { useEffect, useContext, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import * as d3 from 'd3';
-import { NotesContext } from '../_context/NotesContext';
 import DatePopover from '../_components/DatePopover';
 import { SchemaDataItem } from './page';
 import { Separator } from '~/components/ui/separator';
@@ -32,7 +31,9 @@ export default function LineChart(props: LineChartProps) {
     const margin = { top: 40, right: 30, bottom: 30, left: 40 };
     const container = d3.select(containerRef.current);
 
+    // @ts-expect-error": 
     const width = container.node().clientWidth;
+    // @ts-expect-error": 
     const height = container.node().clientHeight;
     svg
       .attr('width', width)
