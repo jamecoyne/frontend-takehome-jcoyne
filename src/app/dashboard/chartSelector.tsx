@@ -1,10 +1,12 @@
+'use client'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '~/components/ui/select';
 
 export type chartType = 'heatmap' | 'linechart'
 
 export default function ChartSelector (props: {currentChart: chartType, setCurrentChart: (chartType: chartType) => void}) {
     return (
-      <Select onValueChange={(value: chartType) => {props.setCurrentChart(value)}} value={props.currentChart}>
+      <div data-testid="chart-selector">
+      <Select onValueChange={(value: chartType) => {props.setCurrentChart(value)}} value={props.currentChart} >
       <SelectTrigger className="w-[180px]">
         <SelectValue placeholder="Select a chart" />
       </SelectTrigger>
@@ -15,5 +17,6 @@ export default function ChartSelector (props: {currentChart: chartType, setCurre
         </SelectGroup>
       </SelectContent>
     </Select>
+    </div>
     );
   }

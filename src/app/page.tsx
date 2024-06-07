@@ -4,7 +4,7 @@ import { SignIn, SignOutButton, SignedIn } from "@clerk/nextjs";
 export default async function Home() {
 
   return (
-    <main className="flex flex-col items-center justify-center " style={{height: 'calc(100vh - 56px)'}}>
+    <main id="sign-in-page" className="flex flex-col items-center justify-center " style={{height: 'calc(100vh - 56px)'}}>
       <Image
       className="m-20"
         src="/logo.svg"
@@ -12,7 +12,7 @@ export default async function Home() {
         width={100}
         height={75}
       />
-      <SignIn routing='hash' fallbackRedirectUrl={'/main'}/>
+      <SignIn routing='hash' fallbackRedirectUrl={'/main'} />
       <SignedIn>          
             <SignOutButton />        
       </SignedIn>    

@@ -5,14 +5,12 @@ import { Button } from "~/components/ui/button";
 
 export default async function Page() {
 return (
-    <div className="flex flex-row">
+    <div className="flex flex-row" id="main-page-body">
         <Sidebar/>
         <Main/>
     </div>
     );
 }
-
-
 
 function Sidebar(){
     return( <div className="flex flex-col bg-neutral-100 w-64 border-2 border-neutral-300 p-4 gap-3" style={{height: 'calc(100vh - 56px)'}}> 

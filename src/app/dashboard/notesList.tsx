@@ -15,7 +15,7 @@ export default function NotesComponent(props: {currentChart: chartType, setCurre
   const { notes, selectNote, removeNote, selectedNoteID } = context;
 
   return (
-    <div className='border-r b-neutral-200' style={{height: 'calc(100vh - 56px)'}}>
+    <div id="notes-page" className='border-r b-neutral-200' style={{height: 'calc(100vh - 56px)'}}>
       <div className='p-4 h-16 items-center flex justify-center'>
       <ChartSelector currentChart={props.currentChart} setCurrentChart={props.setCurrentChart}/>
       </div>
