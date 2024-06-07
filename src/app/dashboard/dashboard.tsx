@@ -7,11 +7,13 @@ import NotesComponent from "./notesList";
 import { DataStructureShape, SchemaDataItem } from "./page";
 import { useState } from "react";
 import { chartType } from "./chartSelector";
+import AnnotationPopover from "./annotationPopover";
 
 export default function Dashboard(props: {data: SchemaDataItem[]}){
     const [currentChart, setCurrentChart] = useState<chartType>('heatmap');
     return (
         <NotesProvider>
+            <AnnotationPopover />
             <ResizablePanelGroup direction="horizontal">
                 <ResizablePanel>   
                     {currentChart == 'linechart'&& <Chart data={props.data} width={1700} height={400} />   }

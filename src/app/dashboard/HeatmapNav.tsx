@@ -6,11 +6,9 @@ export default function HeatmapNav(props: {currentYear: number, minYear: number,
         <Pagination>
           <PaginationContent>
             <PaginationItem>
-              <PaginationPrevious onClick={() => {
-                if(props.minYear != props.currentYear-1){
+              {props.minYear != props.currentYear-1 &&<PaginationPrevious onClick={() => {
                   props.setCurrentYear(props.currentYear-1)
-                }
-                }}/>
+                }}/> }
             </PaginationItem>
             {props.currentYear-2 > props.minYear && 
             <PaginationItem>
@@ -35,11 +33,10 @@ export default function HeatmapNav(props: {currentYear: number, minYear: number,
             <PaginationItem>
             </PaginationItem>
             <PaginationItem>
-              <PaginationNext onClick={() => {
-                if(props.maxYear != props.currentYear+1){
+              {props.maxYear != props.currentYear+1 &&  <PaginationNext onClick={() => {
                   props.setCurrentYear(props.currentYear+1)
-                }
-                }}/>
+                }}/>}
+             
             </PaginationItem>
           </PaginationContent>
         </Pagination>

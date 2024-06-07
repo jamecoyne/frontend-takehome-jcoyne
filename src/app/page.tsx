@@ -12,7 +12,7 @@ export default async function Home() {
         width={100}
         height={75}
       />
-      <SignIn  />
+      <SignIn routing='hash' fallbackRedirectUrl={'/main'}/>
       <SignedIn>          
             <SignOutButton />        
       </SignedIn>    

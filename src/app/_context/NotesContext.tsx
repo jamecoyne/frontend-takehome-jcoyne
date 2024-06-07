@@ -1,66 +1,56 @@
 'use client'
 import React, { createContext, useReducer, useEffect, ReactNode, Dispatch } from 'react';
 
-// Define note type
 interface Note {
   id: string;
   note: string;
-  isSelected: boolean;
 }
 
-// Define action types
 type ActionType =
   | { type: 'ADD_NOTE'; payload: Note }
   | { type: 'REMOVE_NOTE'; payload: string }
-  | { type: 'TOGGLE_NOTE'; payload: string }
-  | { type: 'TOGGLE_ADD_NOTE' };
+  | { type: 'SELECT_NOTE'; payload: string }
+  | { type: 'TOGGLE_ADD_NOTE' ; payload: string | undefined};
 
-// Define the state and context types
 interface NotesState {
   notes: Note[];
-  addNoteEnabled: boolean;
+  addNoteID: string | undefined;
+  selectedNoteID: string | undefined;
 }
 
 interface NotesContextProps extends NotesState {
-  addNote: (note: Note) => void;
+  addNote: ( annotation: string) => void;
   removeNote: (id: string) => void;
-  toggleNote: (id: string) => void;
-  toggleAddNote: () => void;
+  selectNote: (id: string) => void;
+  toggleAddNote: (id: string | undefined) => void;
 }
 
-// Create the context
 const NotesContext = createContext<NotesContextProps | undefined>(undefined);
 
-// Define the initial state
 const initialState: NotesState = {
   notes: [],
-  addNoteEnabled: true,
+  addNoteID: undefined,
+  selectedNoteID: undefined,
 };
 
-// Create a reducer to manage the notes state
 const notesReducer = (state: NotesState, action: ActionType): NotesState => {
   switch (action.type) {
     case 'ADD_NOTE':
-      return { ...state, notes: [...state.notes, action.payload] };
+      return { ...state, notes: [...state.notes, action.payload], addNoteID: undefined };
     case 'REMOVE_NOTE':
       return { ...state, notes: state.notes.filter(note => note.id !== action.payload) };
-    case 'TOGGLE_NOTE':
+    case 'SELECT_NOTE':
       return {
         ...state,
-        notes: state.notes.map(note =>
-          note.id === action.payload
-            ? { ...note, isSelected: !note.isSelected }
-            : note
-        ),
+        selectedNoteID: action.payload
       };
     case 'TOGGLE_ADD_NOTE':
-      return { ...state, addNoteEnabled: !state.addNoteEnabled };
+      return { ...state, addNoteID: action.payload };
     default:
       return state;
   }
 };
 
-// Create a provider component
 const NotesProvider = ({ children }: { children: ReactNode }) => {
   const [state, dispatch] = useReducer(notesReducer, initialState, () => {
     if (typeof window !== "undefined") {
@@ -74,29 +64,29 @@ const NotesProvider = ({ children }: { children: ReactNode }) => {
     localStorage.setItem('notesState', JSON.stringify(state));
   }, [state]);
 
-  // Define action creators
-  const addNote = (note: Note) => {
-    dispatch({ type: 'ADD_NOTE', payload: note });
+  const addNote = (annotation: string) => {
+    dispatch({ type: 'ADD_NOTE', payload: {id: state.addNoteID ?? '', note: annotation} });
   };
 
   const removeNote = (id: string) => {
     dispatch({ type: 'REMOVE_NOTE', payload: id });
   };
 
-  const toggleNote = (id: string) => {
-    dispatch({ type: 'TOGGLE_NOTE', payload: id });
+  const selectNote = (id: string) => {
+    dispatch({ type: 'SELECT_NOTE', payload: id });
   };
 
-  const toggleAddNote = () => {
-    dispatch({ type: 'TOGGLE_ADD_NOTE' });
+  const toggleAddNote = (id: string | undefined) => {
+    dispatch({ type: 'TOGGLE_ADD_NOTE', payload: id });
   };
 
   return (
-    <NotesContext.Provider value={{ ...state, addNote, removeNote, toggleNote, toggleAddNote }}>
+    <NotesContext.Provider value={{ ...state, addNote, removeNote, selectNote, toggleAddNote }}>
       {children}
     </NotesContext.Provider>
   );
 };
 
-export { NotesProvider, NotesContext };    export type { Note };
+export { NotesProvider, NotesContext };    
+export type { Note };
 

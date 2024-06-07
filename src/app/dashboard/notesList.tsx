@@ -1,12 +1,10 @@
 'use client'
-import React, { useContext, useState } from 'react';
-import { Note, NotesContext } from '../_context/NotesContext';
+import React, { useContext } from 'react';
+import { NotesContext } from '../_context/NotesContext';
 import ChartSelector, { chartType } from './chartSelector';
 import { Separator } from '~/components/ui/separator';
 import { X } from 'lucide-react';
 import { Label } from '@radix-ui/react-label';
-
-
 
 export default function NotesComponent(props: {currentChart: chartType, setCurrentChart: (chartType: chartType) => void})  {
 
@@ -14,7 +12,7 @@ export default function NotesComponent(props: {currentChart: chartType, setCurre
       if (!context) {
       throw new Error('NotesComponent must be used within a NotesProvider');
     }
-  const { notes, toggleNote, removeNote } = context;
+  const { notes, selectNote, removeNote, selectedNoteID } = context;
 
   return (
     <div className='border-r b-neutral-200 '>
@@ -22,27 +20,26 @@ export default function NotesComponent(props: {currentChart: chartType, setCurre
       <ChartSelector currentChart={props.currentChart} setCurrentChart={props.setCurrentChart}/>
       </div>
       <Separator />
-      <div className='p-3'>
+      <div className=''>
       <h2>Annotations</h2>
       <ul >
         {notes.map(note => (
-          <li key={note.id} style={{ marginBottom: '10px' }}>
-            <div className='flex flex-row items-center'>
-              <X onClick={() => removeNote(note.id)} style={{ marginLeft: '10px' }}/>
+          <li 
+          onClick={() => selectNote(note.id)}
+          key={note.id} 
+          className='flex flex-row items-center pt-2 pb-2 border-b border-neutral-200' 
+          style={{background: note.id === selectedNoteID ? 'aliceblue' : 'none' }}>
+              <X className="flex, flex-shrink-0" onClick={() => removeNote(note.id)} style={{ marginLeft: '10px', width: '20px', height: '20px' }}/>
               <Label
                 style={{ 
                   cursor: 'pointer', 
                   textOverflow: 'ellipsis', 
                   overflow: 'hidden', 
                   whiteSpace: 'nowrap',
-                  background: note.isSelected ? 'yellow' : 'white'
                  }}
-                onClick={() => toggleNote(note.id)}
               >
                 {note.note}
               </Label>
-            </div>
-           
           </li>
         ))}
       </ul>
